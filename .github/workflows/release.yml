@@ -166,4 +166,4 @@ jobs:
 
     - name: Notify chat
       run: | 
-        [ ! -z "$URL" ] && "curl $URL?threadKey=${{ steps.env_info.outputs.threadKey }}" -H "Content-Type: application/json" -d '{ "text" : "Release created *${{ steps.env_info.outputs.issuetitle }}*" }'
+        [ ! -z "$URL" ] && "curl $URL&threadKey=${{ steps.env_info.outputs.threadKey }}" -H "Content-Type: application/json" -d '{ "text" : "Release created *${{ steps.env_info.outputs.issuetitle }}*" }'
