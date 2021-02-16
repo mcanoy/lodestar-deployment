@@ -14,6 +14,7 @@ jobs:
         echo ::set-output name=release::$(git ls-remote --heads https://github.com/$GITHUB_REPOSITORY $ISSUE_TITLE)
         echo ::set-output name=issuenm::$(jq .client_payload.github.payload.issue.number $GITHUB_EVENT_PATH)
         echo ::set-output name=issuetitle::$ISSUE_TITLE
+        echo ::set-output name=threadyKey::$GITHUB_REPOSITORY-$ISSUE_TITLE
     - name: Create release branch
       uses: peterjgrainger/action-create-branch@v1.0.0
       env:
@@ -66,6 +67,8 @@ jobs:
   update-release-pointers:
     runs-on: ubuntu-latest
     needs: create-release-branch
+    env:
+      URL: ${{ secrets.NOTIFICATION_URL }}
     steps:
     - name: Get Environment Info
       id: env_info
@@ -160,3 +163,7 @@ jobs:
         issue-number: "${{ steps.env_info.outputs.issuenm }}"
         body: |
           Created release ${{ steps.env_info.outputs.issuetitle }}!
+
+    - name: Notify chat
+      run: | 
+        [ ! -z "$URL" ] && "curl $URL?threadKey=${{ steps.env_info.outputs.threadKey }}" -H "Content-Type: application/json" -d '{ "text" : "Release created *${{ steps.env_info.outputs.issuetitle }}*" }'
