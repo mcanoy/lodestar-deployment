@@ -25,8 +25,8 @@ jobs:
       uses: peter-evans/close-issue@v1
       with:
         issue-number: ${{ steps.env_info.outputs.issuenm }}
-        comment: Cancelling rollout as requested by @${{ steps.env_info.outputs.requestor }}.
+        comment: Cancelling rollout as requested by ${{ steps.env_info.outputs.requestor }}.
     - name: Notify chat
       run: |
        echo "Thread key GIIHUB_REPOSITORY-${{ steps.env_info.outputs.issuenm }} "
-        [ ! -z "$URL" ] && curl "$URL&threadKey=$GIIHUB_REPOSITORY-${{ steps.env_info.outputs.issuenm}}" -H "Content-Type: application/json" -d '{ "text" : "\uD83E\uDDEF cancelling rollout as requested by ${{ steps.env_info.outputs.requestor }}" }'
+        [ ! -z "$URL" ] && curl "$URL&threadKey=$GIIHUB_REPOSITORY-${{ steps.env_info.outputs.issuenm}}" -H "Content-Type: application/json" -d '{ "text" : " cancelling rollout as requested by ${{ steps.env_info.outputs.requestor }}" }'
